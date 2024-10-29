@@ -1,0 +1,47 @@
+# Kevin Renaldi Bahari
+# 陈凯文
+# 202369990129
+
+# python code
+
+from collections import namedtuple
+
+Bracket = namedtuple("Bracket", ["char", "position"])
+
+
+def are_matching(left, right):
+    return (left + right) in ["()", "[]", "{}"]
+
+
+def find_mismatch(text):
+    opening_brackets_stack = []
+    length = 0
+
+    for i, value in enumerate(text):
+        if value in "([{":
+            opening_brackets_stack.append(Bracket(value, i))
+            length += 1
+
+        if value in ")]}":
+            if length == 0 and i == 0:
+                return 1
+            if length > 0 and are_matching(opening_brackets_stack[length - 1].char, value):
+                del opening_brackets_stack[-1]
+                length -= 1
+            else:
+                return i + 1
+
+    if length == 0:
+        return 'Success'
+    else:
+        return opening_brackets_stack[-1].position + 1
+
+
+def main():
+    text = input()
+    mismatch = find_mismatch(text)
+    print(mismatch)
+
+
+if __name__ == "__main__":
+    main()
